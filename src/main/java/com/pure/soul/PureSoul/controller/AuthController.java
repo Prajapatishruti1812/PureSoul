@@ -1,12 +1,13 @@
 package com.pure.soul.PureSoul.controller;
 
 import com.pure.soul.PureSoul.dto.LoginRequest;
+import com.pure.soul.PureSoul.dto.LoginResponse;
 import com.pure.soul.PureSoul.dto.RegisterRequest;
 import com.pure.soul.PureSoul.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:5500")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -18,12 +19,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(userService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.login(request));
     }
 }

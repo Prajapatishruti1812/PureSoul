@@ -1,6 +1,7 @@
 package com.pure.soul.PureSoul.service;
 
 import com.pure.soul.PureSoul.dto.LoginRequest;
+import com.pure.soul.PureSoul.dto.LoginResponse;
 import com.pure.soul.PureSoul.dto.RegisterRequest;
 import com.pure.soul.PureSoul.entity.User;
 import com.pure.soul.PureSoul.repository.UserRepository;
@@ -19,7 +20,8 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String register(RegisterRequest request) {
+    public LoginResponse register(RegisterRequest request) {
+        LoginResponse loginResponse = new LoginResponse();
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new RuntimeException("Passwords do not match");
         }
@@ -41,10 +43,12 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         userRepository.save(user);
-        return "User registered successfully";
+        loginResponse.setResponse("User registered successfully");
+        return loginResponse;
     }
 
-    public String login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
+        LoginResponse loginResponse = new LoginResponse();
         Optional<User> userOpt = userRepository.findByUsernameOrEmail(request.getLogin(), request.getLogin());
         if (!userOpt.isPresent()) {
             throw new RuntimeException("User not found");
@@ -55,6 +59,8 @@ public class UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        return "Login successful";
+        loginResponse.setResponse("Login successful");
+
+        return loginResponse;
     }
 }
